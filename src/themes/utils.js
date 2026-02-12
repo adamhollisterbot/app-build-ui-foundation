@@ -54,6 +54,7 @@
  * @property {Object} elevation - Elevation/shadow tokens
  * @property {Object} radius - Border radius tokens
  * @property {Object} motion - Animation tokens
+ * @property {Object} tactile - Tactile depth tokens for polished UI
  * 
  * @typedef {Partial<Omit<Theme, 'name' | 'colorScheme' | 'mode'>>} ThemeOverride
  */
@@ -103,6 +104,7 @@ export function createTheme(
       : baseTheme.elevation,
     radius: override.radius ? { ...baseTheme.radius, ...override.radius } : baseTheme.radius,
     motion: override.motion ? { ...baseTheme.motion, ...override.motion } : baseTheme.motion,
+    tactile: override.tactile ? { ...baseTheme.tactile, ...override.tactile } : baseTheme.tactile,
   };
 }
 

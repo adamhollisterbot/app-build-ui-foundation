@@ -22,7 +22,7 @@ import { useTheme } from '../../../providers/index.jsx';
  */
 
 /**
- * Full-featured text input with labels, errors, and icons
+ * Full-featured text input with labels, errors, and tactile depth
  * @type {React.ForwardRefExoticComponent<TextInputProps & React.RefAttributes<import('react-native').TextInput>>}
  */
 export const TextInput = forwardRef(function TextInput(
@@ -45,6 +45,7 @@ export const TextInput = forwardRef(function TextInput(
   const [isFocused, setIsFocused] = useState(false);
 
   const hasError = Boolean(error);
+  const isDark = theme.mode === 'dark';
 
   // Handle focus state
   const handleFocus = (e) => {
@@ -57,12 +58,48 @@ export const TextInput = forwardRef(function TextInput(
     onBlur?.(e);
   };
 
-  // Border color
+  // Get tactile tokens for current mode
+  const tactile = isDark ? theme.tactile?.dark?.input : theme.tactile?.light?.input;
+  const shadows = theme.tactile?.shadows;
+
+  // Border color based on state
   const borderColor = hasError
     ? theme.colors.semantic.error.main
     : isFocused
       ? theme.colors.semantic.primary.main
       : theme.colors.border.default;
+
+  // Tactile border colors - inputs are "recessed" so top is darker
+  const borderTopColor = hasError
+    ? theme.colors.semantic.error.dark
+    : isFocused
+      ? theme.colors.semantic.primary.main
+      : tactile?.borderTop || (isDark ? 'rgba(0, 0, 0, 0.4)' : 'rgba(0, 0, 0, 0.1)');
+  
+  const borderBottomColor = hasError
+    ? theme.colors.semantic.error.light
+    : isFocused
+      ? theme.colors.semantic.primary.main
+      : tactile?.borderBottom || (isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.8)');
+
+  // Side borders for smooth gradient effect
+  const borderSideColor = hasError
+    ? theme.colors.semantic.error.main
+    : isFocused
+      ? theme.colors.semantic.primary.main
+      : theme.colors.border.default;
+
+  // Focus glow shadow
+  const focusShadow = isFocused
+    ? isDark
+      ? shadows?.inputFocusDark
+      : shadows?.inputFocusLight
+    : null;
+
+  // Inset shadow effect (simulated with inner view)
+  const insetShadow = !isFocused && !disabled
+    ? shadows?.inputInset
+    : null;
 
   return (
     <View style={[styles.wrapper, style]}>
@@ -84,7 +121,7 @@ export const TextInput = forwardRef(function TextInput(
         </Text>
       )}
 
-      {/* Input container */}
+      {/* Input container with tactile depth */}
       <View
         style={[
           styles.container,
@@ -92,11 +129,38 @@ export const TextInput = forwardRef(function TextInput(
             backgroundColor: disabled
               ? theme.colors.background.tertiary
               : theme.colors.surface.primary,
-            borderColor,
             borderRadius: theme.radius.md,
+            // Tactile dimensional border
+            borderWidth: 1,
+            borderTopWidth: 1.5,
+            borderBottomWidth: 1.5,
+            borderTopColor,
+            borderBottomColor,
+            borderLeftColor: borderSideColor,
+            borderRightColor: borderSideColor,
           },
+          // Focus glow effect
+          focusShadow,
+          // Inset shadow for depth
+          insetShadow,
         ]}
       >
+        {/* Inner highlight for subtle dimension */}
+        {!disabled && !isFocused && (
+          <View
+            style={[
+              styles.innerHighlight,
+              {
+                backgroundColor: isDark
+                  ? 'rgba(0, 0, 0, 0.15)'
+                  : 'rgba(0, 0, 0, 0.02)',
+                borderTopLeftRadius: theme.radius.md - 1,
+                borderTopRightRadius: theme.radius.md - 1,
+              },
+            ]}
+          />
+        )}
+
         {leftElement && <View style={styles.leftElement}>{leftElement}</View>}
 
         <RNTextInput
@@ -148,9 +212,17 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
     minHeight: 48,
     paddingHorizontal: 12,
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  innerHighlight: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 20,
   },
   input: {
     flex: 1,
