@@ -9,7 +9,7 @@ Polished, native-feeling UI components for React Native + Web with comprehensive
 - 🔧 **Extensible** - Style guides plug in as theme overrides
 - ♿ **Accessible** - Proper ARIA labels, touch targets, and screen reader support
 - 📱 **Cross-platform** - React Native + Web compatibility
-- 🎯 **TypeScript first** - Full type safety throughout
+- 📝 **Well-documented** - JSDoc type hints for IDE autocomplete
 
 ## Installation
 
@@ -27,7 +27,7 @@ npm install react react-native react-native-reanimated
 
 ### 1. Wrap your app with the provider
 
-```typescript
+```javascript
 import { UIFoundationProvider } from '@appbuild/ui-foundation';
 
 export default function App() {
@@ -41,7 +41,7 @@ export default function App() {
 
 ### 2. Use components
 
-```typescript
+```javascript
 import { Button, TextInput } from '@appbuild/ui-foundation';
 
 function LoginScreen() {
@@ -67,7 +67,7 @@ function LoginScreen() {
 
 ### 3. Access theme tokens
 
-```typescript
+```javascript
 import { useTheme } from '@appbuild/ui-foundation';
 
 function CustomComponent() {
@@ -99,7 +99,7 @@ npm install @synthpunk/style-guide
 
 Apply it:
 
-```typescript
+```javascript
 import { UIFoundationProvider } from '@appbuild/ui-foundation';
 import { synthpunkTheme } from '@synthpunk/style-guide';
 
@@ -114,7 +114,7 @@ export default function App() {
 
 ### Creating a Custom Theme
 
-```typescript
+```javascript
 import { UIFoundationProvider, type ThemeOverride } from '@appbuild/ui-foundation';
 
 const myTheme: ThemeOverride = {
@@ -155,7 +155,7 @@ export default function App() {
 ## Design Tokens
 
 ### Spacing
-```typescript
+```javascript
 spacing.xs   // 4px
 spacing.sm   // 8px
 spacing.md   // 12px

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Meta, StoryObj } from '@storybook/react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useTheme } from '../providers';
 import { spacing, palette, semanticColors, typography, textStyles, radius, motion } from './index';
 
+/** @type {import('@storybook/react').Meta} */
 const meta = {
   title: 'Design Tokens/All Tokens',
   parameters: {
@@ -12,10 +12,9 @@ const meta = {
 };
 
 export default meta;
-// type Story = StoryObj<typeof meta>;
 
 // Color Swatch Component
-const ColorSwatch = ({ color, name }: { color: string; name: string }) => (
+const ColorSwatch = ({ color, name }) => (
   <View style={styles.colorSwatch}>
     <View style={[styles.colorBox, { backgroundColor: color }]} />
     <View>
@@ -160,7 +159,7 @@ export const Typography= {
               <Text style={styles.tokenName}>{name}</Text>
               <Text style={styles.tokenValue}>{weight}</Text>
             </View>
-            <Text style={[styles.typographyExample, { fontWeight: weight as any }]}>
+            <Text style={[styles.typographyExample, { fontWeight: weight }]}>
               The quick brown fox jumps
             </Text>
           </View>
@@ -172,7 +171,7 @@ export const Typography= {
         {Object.entries(textStyles).map(([name, style]) => (
           <View key={name} style={styles.typographyRow}>
             <Text style={styles.tokenName}>{name}</Text>
-            <Text style={[styles.typographyExample, style as any]}>
+            <Text style={[styles.typographyExample, style]}>
               The quick brown fox jumps over the lazy dog
             </Text>
           </View>

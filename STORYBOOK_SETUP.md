@@ -5,14 +5,14 @@
 ### 1. Storybook Installation & Configuration
 - ✅ Installed Storybook 8.6.x for React  
 - ✅ Installed required dependencies (react-dom, react-native-web, babel presets)
-- ✅ Created `.storybook/main.ts` with webpack configuration for React Native Web
-- ✅ Created `.storybook/preview.tsx` with theme provider decorator and theme switcher
-- ✅ Created `.babelrc.js` for TypeScript transpilation
+- ✅ Created `.storybook/main.js` with webpack configuration for React Native Web
+- ✅ Created `.storybook/preview.jsx` with theme provider decorator and theme switcher
+- ✅ Created `.babelrc.js` for JavaScript transpilation
 - ✅ Configured react-native → react-native-web aliasing for web compatibility
 
 ### 2. Component Stories Created
 
-**Button Stories** (`src/components/atoms/Button/Button.stories.tsx`)
+**Button Stories** (`src/components/atoms/Button/Button.stories.jsx`)
 - All 4 variants showcased (filled, outlined, ghost, soft)
 - All 3 sizes (sm, md, lg)
 - All 5 color schemes (primary, secondary, success, error, warning)
@@ -21,7 +21,7 @@
 - Full width variant
 - Interactive playground with complete prop controls
 
-**TextInput Stories** (`src/components/inputs/TextInput/TextInput.stories.tsx`)
+**TextInput Stories** (`src/components/inputs/TextInput/TextInput.stories.jsx`)
 - Basic input
 - With label
 - With helper text
@@ -34,7 +34,7 @@
 
 ### 3. Design Tokens Showcase
 
-**Tokens Stories** (`src/tokens/Tokens.stories.tsx`)
+**Tokens Stories** (`src/tokens/Tokens.stories.jsx`)
 - **Colors**: Complete semantic color palette with light/dark variants
 - **Spacing**: Visual spacing scale from 2px to 96px
 - **Typography**: All font sizes, weights, and text style presets
@@ -44,7 +44,7 @@
 
 ### 4. Theme Examples
 
-**Theme Stories** (`src/ThemeExamples.stories.tsx`)
+**Theme Stories** (`src/ThemeExamples.stories.jsx`)
 - Light theme demo app
 - Dark theme demo app
 - Side-by-side theme comparison
@@ -71,33 +71,33 @@ Added to `package.json`:
 
 ## ⚠️ Known Issues & Resolution
 
-### TypeScript Syntax Transpilation
+### JavaScript Syntax Transpilation
 
-The story files use TypeScript syntax (`import type`, `satisfies`, type annotations) which requires proper babel configuration. The build is failing because Storybook's loaders process files before babel can transpile them.
+The story files use JavaScript syntax (`import type`, `satisfies`, type annotations) which requires proper babel configuration. The build is failing because Storybook's loaders process files before babel can transpile them.
 
 **Resolution Options:**
 
 1. **Option A - Use JavaScript** (Recommended for immediate fix):
    ```bash
-   # Rename all .stories.tsx files to .stories.jsx
-   find src -name "*.stories.tsx" -exec sh -c 'mv "$1" "${1%.tsx}.jsx"' _ {} \;
-   find .storybook -name "*.tsx" -exec sh -c 'mv "$1" "${1%.tsx}.jsx"' _ {} \;
+   # Rename all .stories.jsx files to .stories.jsx
+   find src -name "*.stories.jsx" -exec sh -c 'mv "$1" "${1%.jsx}.jsx"' _ {} \;
+   find .storybook -name "*.jsx" -exec sh -c 'mv "$1" "${1%.jsx}.jsx"' _ {} \;
    
-   # Remove all TypeScript-specific syntax
+   # Remove all JavaScript-specific syntax
    # - Remove import type statements
    # - Remove type annotations
    # - Remove satisfies keywords
    ```
 
 2. **Option B - Fix Babel Configuration**:
-   Update `.storybook/main.ts` to ensure babel processes TypeScript correctly:
-   ```typescript
+   Update `.storybook/main.js` to ensure babel processes JavaScript correctly:
+   ```javascript
    babel: async (options) => ({
      ...options,
      presets: [
        '@babel/preset-env',
        ['@babel/preset-react', { runtime: 'automatic' }],
-       ['@babel/preset-typescript', { 
+       ['@babel/preset-javascript', { 
          isTSX: true, 
          allExtensions: true,
          onlyRemoveTypeImports: true 
@@ -107,8 +107,8 @@ The story files use TypeScript syntax (`import type`, `satisfies`, type annotati
    ```
 
 3. **Option C - Use SWC** (Modern alternative):
-   Enable SWC in `.storybook/main.ts`:
-   ```typescript
+   Enable SWC in `.storybook/main.js`:
+   ```javascript
    framework: {
      name: '@storybook/react-webpack5',
      options: {
@@ -169,13 +169,13 @@ Theming/
 ## 📝 Files Created/Modified
 
 ### Created:
-- `.storybook/main.ts` - Main Storybook configuration
-- `.storybook/preview.tsx` - Global decorators and theme switcher
-- `.babelrc.js` - Babel configuration for TypeScript
-- `src/components/atoms/Button/Button.stories.tsx` - Button stories
-- `src/components/inputs/TextInput/TextInput.stories.tsx` - TextInput stories
-- `src/tokens/Tokens.stories.tsx` - Token showcase
-- `src/ThemeExamples.stories.tsx` - Theme examples
+- `.storybook/main.js` - Main Storybook configuration
+- `.storybook/preview.jsx` - Global decorators and theme switcher
+- `.babelrc.js` - Babel configuration for JavaScript
+- `src/components/atoms/Button/Button.stories.jsx` - Button stories
+- `src/components/inputs/TextInput/TextInput.stories.jsx` - TextInput stories
+- `src/tokens/Tokens.stories.jsx` - Token showcase
+- `src/ThemeExamples.stories.jsx` - Theme examples
 - `STORYBOOK.md` - Complete documentation
 
 ### Modified:
@@ -197,7 +197,7 @@ Theming/
   "react-dom": "^18.3.1",
   "react-native-web": "^0.21.2",
   "@babel/preset-react": "latest",
-  "@babel/preset-typescript": "latest"
+  "@babel/preset-javascript": "latest"
 }
 ```
 
@@ -212,7 +212,7 @@ Theming/
 
 ## 🎯 Next Steps
 
-1. Fix TypeScript transpilation (see Resolution Options above)
+1. Fix JavaScript transpilation (see Resolution Options above)
 2. Run `npm run build-storybook` successfully
 3. Deploy to hosting (Vercel, Netlify, GitHub Pages, etc.)
 4. Add stories for future components as they're created
@@ -226,4 +226,4 @@ Theming/
 
 ---
 
-**Status**: Implementation complete, awaiting TypeScript transpilation fix for successful build.
+**Status**: Implementation complete, awaiting JavaScript transpilation fix for successful build.

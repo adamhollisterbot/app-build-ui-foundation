@@ -3,8 +3,9 @@ import { AccessibilityInfo } from 'react-native';
 
 /**
  * Hook to check if user prefers reduced motion
+ * @returns {boolean} Whether reduced motion is enabled
  */
-export function useReducedMotion(): boolean {
+export function useReducedMotion() {
   const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {

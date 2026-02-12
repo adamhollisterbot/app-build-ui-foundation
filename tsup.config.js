@@ -2,12 +2,12 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: {
-    index: 'src/index.ts',
-    'tokens/index': 'src/tokens/index.ts',
-    'themes/index': 'src/themes/index.ts',
+    index: 'src/index.js',
+    'tokens/index': 'src/tokens/index.js',
+    'themes/index': 'src/themes/index.js',
   },
   format: ['cjs', 'esm'],
-  dts: true,
+  dts: false,  // No TypeScript declarations
   splitting: false,
   sourcemap: true,
   clean: true,

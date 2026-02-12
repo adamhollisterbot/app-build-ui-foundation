@@ -2,7 +2,7 @@
  * Motion/animation tokens
  */
 
-export const motion = {
+export const motion = Object.freeze({
   duration: {
     /** 100ms - Micro-interactions (button press) */
     instant: 100,
@@ -35,4 +35,4 @@ export const motion = {
     /** Bouncy spring for fun interactions */
     bouncy: { damping: 10, stiffness: 200 },
   },
-} as const;
+});

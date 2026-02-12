@@ -2,7 +2,7 @@
  * Typography tokens
  */
 
-export const typography = {
+export const typography = Object.freeze({
   fontFamily: {
     /** System fonts - platform native */
     sans: {
@@ -51,10 +51,10 @@ export const typography = {
     normal: 0,
     wide: 0.5,
   },
-} as const;
+});
 
 // Preset text styles
-export const textStyles = {
+export const textStyles = Object.freeze({
   // Display (heroes, splash screens)
   displayLarge: {
     fontSize: typography.fontSize['4xl'],
@@ -126,4 +126,4 @@ export const textStyles = {
     fontWeight: typography.fontWeight.regular,
     lineHeight: typography.lineHeight.normal,
   },
-} as const;
+});

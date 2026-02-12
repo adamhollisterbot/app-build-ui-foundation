@@ -24,14 +24,14 @@ This creates a static build in the `storybook-static/` directory that can be dep
 
 ### Component Stories
 
-**Button** (`src/components/atoms/Button/Button.stories.tsx`)
+**Button** (`src/components/atoms/Button/Button.stories.jsx`)
 - All 4 variants: filled, outlined, ghost, soft
 - All 3 sizes: small, medium, large
 - All 5 color schemes: primary, secondary, success, error, warning
 - States: disabled, loading, with icons
 - Interactive playground with full prop controls
 
-**TextInput** (`src/components/inputs/TextInput/TextInput.stories.tsx`)
+**TextInput** (`src/components/inputs/TextInput/TextInput.stories.jsx`)
 - Basic input variations
 - With label, helper text, and error states
 - With left/right elements
@@ -41,7 +41,7 @@ This creates a static build in the `storybook-static/` directory that can be dep
 
 ### Design Tokens
 
-**Tokens Showcase** (`src/tokens/Tokens.stories.tsx`)
+**Tokens Showcase** (`src/tokens/Tokens.stories.jsx`)
 
 Comprehensive visual documentation of all design tokens:
 
@@ -53,7 +53,7 @@ Comprehensive visual documentation of all design tokens:
 
 ### Theme Examples
 
-**Theme System** (`src/ThemeExamples.stories.tsx`)
+**Theme System** (`src/ThemeExamples.stories.jsx`)
 
 - Light theme demo app
 - Dark theme demo app
@@ -73,7 +73,7 @@ This demonstrates how components adapt to different themes using the `UIFoundati
 
 ## ✍️ Adding Stories for New Components
 
-When you create a new component, add a corresponding `.stories.tsx` file:
+When you create a new component, add a corresponding `.stories.jsx` file:
 
 ### File Structure
 
@@ -81,9 +81,9 @@ When you create a new component, add a corresponding `.stories.tsx` file:
 src/
   components/
     YourComponent/
-      YourComponent.tsx
-      YourComponent.stories.tsx  ← Add this
-      index.ts
+      YourComponent.jsx
+      YourComponent.stories.jsx  ← Add this
+      index.js
 ```
 
 ### Basic Story Template
@@ -155,7 +155,7 @@ export const AllVariants: Story = {
 When adding new design tokens:
 
 1. Add the token to the appropriate file in `src/tokens/`
-2. Update `src/tokens/Tokens.stories.tsx` to showcase the new token
+2. Update `src/tokens/Tokens.stories.jsx` to showcase the new token
 3. Use the existing patterns (color swatches, spacing visualizations, etc.)
 4. Add helpful descriptions and use cases
 
@@ -263,12 +263,12 @@ npm run deploy-storybook
 
 Storybook configuration files:
 
-- `.storybook/main.ts` - Main configuration (webpack, addons, etc.)
-- `.storybook/preview.tsx` - Global decorators, parameters, theme switcher
+- `.storybook/main.js` - Main configuration (webpack, addons, etc.)
+- `.storybook/preview.jsx` - Global decorators, parameters, theme switcher
 
 ### Customizing the Theme Switcher
 
-The theme switcher is configured in `.storybook/preview.tsx`:
+The theme switcher is configured in `.storybook/preview.jsx`:
 
 ```tsx
 globalTypes: {
@@ -322,11 +322,11 @@ import { Component } from '@appbuild/ui-foundation';
 - Clear cache: `rm -rf node_modules/.cache`
 
 **Components not rendering**
-- Ensure `UIFoundationProvider` is wrapping components in preview.tsx
-- Check that react-native-web aliases are configured in main.ts
+- Ensure `UIFoundationProvider` is wrapping components in preview.jsx
+- Check that react-native-web aliases are configured in main.js
 
 **Theme switcher not working**
-- Verify the decorator in preview.tsx is passing the colorScheme prop
+- Verify the decorator in preview.jsx is passing the colorScheme prop
 - Check that components are using `useTheme()` hook
 
 ## 📚 Resources

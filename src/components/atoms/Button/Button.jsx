@@ -1,12 +1,9 @@
-import React, { useCallback, type ReactNode } from 'react';
+import React, { useCallback } from 'react';
 import {
   Pressable,
   Text,
   ActivityIndicator,
   StyleSheet,
-  type PressableProps,
-  type ViewStyle,
-  type TextStyle,
 } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -14,42 +11,39 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
-import { useTheme } from '../../../providers';
-import { useReducedMotion } from '../../../hooks';
+import { useTheme } from '../../../providers/index.jsx';
+import { useReducedMotion } from '../../../hooks/index.js';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-export type ButtonVariant = 'filled' | 'outlined' | 'ghost' | 'soft';
-export type ButtonSize = 'sm' | 'md' | 'lg';
-export type ButtonColor = 'primary' | 'secondary' | 'success' | 'error' | 'warning';
+/**
+ * @typedef {'filled' | 'outlined' | 'ghost' | 'soft'} ButtonVariant
+ * @typedef {'sm' | 'md' | 'lg'} ButtonSize
+ * @typedef {'primary' | 'secondary' | 'success' | 'error' | 'warning'} ButtonColor
+ */
 
-export interface ButtonProps extends Omit<PressableProps, 'style'> {
-  /** Button label */
-  children: ReactNode;
-  /** Visual variant */
-  variant?: ButtonVariant;
-  /** Size preset */
-  size?: ButtonSize;
-  /** Color scheme */
-  color?: ButtonColor;
-  /** Show loading spinner */
-  loading?: boolean;
-  /** Disable interactions */
-  disabled?: boolean;
-  /** Full width */
-  fullWidth?: boolean;
-  /** Left icon component */
-  leftIcon?: ReactNode;
-  /** Right icon component */
-  rightIcon?: ReactNode;
-  /** Custom styles */
-  style?: ViewStyle;
-  /** Custom text styles */
-  textStyle?: TextStyle;
-  /** Enable haptic feedback */
-  haptics?: boolean;
-}
+/**
+ * @typedef {Object} ButtonProps
+ * @property {React.ReactNode} children - Button label
+ * @property {ButtonVariant} [variant='filled'] - Visual variant
+ * @property {ButtonSize} [size='md'] - Size preset
+ * @property {ButtonColor} [color='primary'] - Color scheme
+ * @property {boolean} [loading=false] - Show loading spinner
+ * @property {boolean} [disabled=false] - Disable interactions
+ * @property {boolean} [fullWidth=false] - Full width
+ * @property {React.ReactNode} [leftIcon] - Left icon component
+ * @property {React.ReactNode} [rightIcon] - Right icon component
+ * @property {Object} [style] - Custom styles
+ * @property {Object} [textStyle] - Custom text styles
+ * @property {boolean} [haptics=true] - Enable haptic feedback
+ * @property {Function} [onPress] - Press handler
+ * @property {Function} [onPressIn] - Press in handler
+ */
 
+/**
+ * Polished button component with haptic feedback and animations
+ * @param {ButtonProps} props
+ */
 export function Button({
   children,
   variant = 'filled',
@@ -66,7 +60,7 @@ export function Button({
   onPress,
   onPressIn,
   ...pressableProps
-}: ButtonProps) {
+}) {
   const theme = useTheme();
   const reducedMotion = useReducedMotion();
   const scale = useSharedValue(1);
@@ -76,7 +70,7 @@ export function Button({
 
   // Handle press animations
   const handlePressIn = useCallback(
-    (event: any) => {
+    (event) => {
       if (!reducedMotion) {
         scale.value = withSpring(0.97, theme.motion.spring.snappy);
       }
@@ -148,7 +142,7 @@ export function Button({
 }
 
 // Style helpers
-function getSizeStyles(size: ButtonSize, theme: any) {
+function getSizeStyles(size, theme) {
   const sizes = {
     sm: {
       container: {
@@ -194,10 +188,10 @@ function getSizeStyles(size: ButtonSize, theme: any) {
 }
 
 function getVariantStyles(
-  variant: ButtonVariant,
-  colorValues: any,
-  disabled: boolean,
-  theme: any
+  variant,
+  colorValues,
+  disabled,
+  theme
 ) {
   const opacity = disabled ? 0.5 : 1;
 

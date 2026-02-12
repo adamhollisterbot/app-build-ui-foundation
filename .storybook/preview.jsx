@@ -1,7 +1,7 @@
 import React from 'react';
-import { Preview } from '@storybook/react';
-import { UIFoundationProvider } from '../src/providers';
+import { UIFoundationProvider } from '../src/providers/index.jsx';
 
+/** @type {import('@storybook/react').Preview} */
 const preview = {
   parameters: {
     actions: { argTypesRegex: '^on[A-Z].*' },
@@ -30,7 +30,7 @@ const preview = {
       const colorScheme = context.globals.theme || 'light';
       
       return (
-        <UIFoundationProvider colorScheme={colorScheme as 'light' | 'dark'}>
+        <UIFoundationProvider colorScheme={colorScheme}>
           <div style={{ padding: '2rem' }}>
             <Story />
           </div>

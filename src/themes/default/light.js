@@ -1,4 +1,4 @@
-import { lightColors, semanticColors } from '../../tokens/colors';
+import { lightColors, semanticColors } from '../../tokens/colors.js';
 
 export const defaultLightTheme = {
   ...lightColors,

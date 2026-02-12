@@ -1,7 +1,8 @@
 /**
  * Spacing tokens based on 4px base unit
+ * @type {Readonly<{none: 0, '2xs': 2, xs: 4, sm: 8, md: 12, lg: 16, xl: 24, '2xl': 32, '3xl': 48, '4xl': 64, '5xl': 96}>}
  */
-export const spacing = {
+export const spacing = Object.freeze({
   /** 0px */
   none: 0,
   /** 2px - Hairline spacing */
@@ -24,6 +25,8 @@ export const spacing = {
   '4xl': 64,
   /** 96px - Hero spacing */
   '5xl': 96,
-} as const;
+});
 
-export type SpacingToken = keyof typeof spacing;
+/**
+ * @typedef {keyof typeof spacing} SpacingToken
+ */

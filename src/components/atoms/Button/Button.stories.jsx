@@ -1,7 +1,7 @@
-import { Meta, StoryObj } from '@storybook/react';
-import { Button } from './Button';
+import { Button } from './Button.jsx';
 import { View, Text } from 'react-native';
 
+/** @type {import('@storybook/react').Meta} */
 const meta = {
   title: 'Components/Button',
   component: Button,

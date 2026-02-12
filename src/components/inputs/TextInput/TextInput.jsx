@@ -4,31 +4,28 @@ import {
   TextInput as RNTextInput,
   Text,
   StyleSheet,
-  type TextInputProps as RNTextInputProps,
-  type ViewStyle,
 } from 'react-native';
-import { useTheme } from '../../../providers';
+import { useTheme } from '../../../providers/index.jsx';
 
-export interface TextInputProps extends Omit<RNTextInputProps, 'style'> {
-  /** Input label */
-  label?: string;
-  /** Helper text below input */
-  helperText?: string;
-  /** Error message (shows error state) */
-  error?: string;
-  /** Left icon/element */
-  leftElement?: React.ReactNode;
-  /** Right icon/element */
-  rightElement?: React.ReactNode;
-  /** Container style */
-  style?: ViewStyle;
-  /** Disabled state */
-  disabled?: boolean;
-  /** Required indicator */
-  required?: boolean;
-}
+/**
+ * @typedef {Object} TextInputProps
+ * @property {string} [label] - Input label
+ * @property {string} [helperText] - Helper text below input
+ * @property {string} [error] - Error message (shows error state)
+ * @property {React.ReactNode} [leftElement] - Left icon/element
+ * @property {React.ReactNode} [rightElement] - Right icon/element
+ * @property {Object} [style] - Container style
+ * @property {boolean} [disabled=false] - Disabled state
+ * @property {boolean} [required=false] - Required indicator
+ * @property {Function} [onFocus] - Focus handler
+ * @property {Function} [onBlur] - Blur handler
+ */
 
-export const TextInput = forwardRef<RNTextInput, TextInputProps>(function TextInput(
+/**
+ * Full-featured text input with labels, errors, and icons
+ * @type {React.ForwardRefExoticComponent<TextInputProps & React.RefAttributes<import('react-native').TextInput>>}
+ */
+export const TextInput = forwardRef(function TextInput(
   {
     label,
     helperText,
@@ -50,12 +47,12 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(function TextIn
   const hasError = Boolean(error);
 
   // Handle focus state
-  const handleFocus = (e: any) => {
+  const handleFocus = (e) => {
     setIsFocused(true);
     onFocus?.(e);
   };
 
-  const handleBlur = (e: any) => {
+  const handleBlur = (e) => {
     setIsFocused(false);
     onBlur?.(e);
   };

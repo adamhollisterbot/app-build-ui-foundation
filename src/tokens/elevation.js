@@ -2,7 +2,7 @@
  * Elevation/shadow tokens
  */
 
-export const elevation = {
+export const elevation = Object.freeze({
   /** No shadow - flat elements */
   none: {
     shadowColor: '#000',
@@ -43,13 +43,13 @@ export const elevation = {
     shadowRadius: 16,
     elevation: 12,
   },
-} as const;
+});
 
 // CSS output for web
-export const elevationCSS = {
+export const elevationCSS = Object.freeze({
   none: 'none',
   sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
   md: '0 2px 4px rgba(0, 0, 0, 0.1)',
   lg: '0 4px 8px rgba(0, 0, 0, 0.15)',
   xl: '0 8px 16px rgba(0, 0, 0, 0.2)',
-} as const;
+});

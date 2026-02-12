@@ -1,7 +1,7 @@
-import { Meta, StoryObj } from '@storybook/react';
-import { TextInput } from './TextInput';
+import { TextInput } from './TextInput.jsx';
 import { View, Text } from 'react-native';
 
+/** @type {import('@storybook/react').Meta} */
 const meta = {
   title: 'Components/TextInput',
   component: TextInput,

@@ -1,7 +1,6 @@
-import type { StorybookConfig } from '@storybook/react-webpack5';
-
-const config: StorybookConfig = {
-  stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+/** @type {import('@storybook/react-webpack5').StorybookConfig} */
+const config = {
+  stories: ['../src/**/*.stories.@(js|jsx|mjs)'],
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',
@@ -18,21 +17,11 @@ const config: StorybookConfig = {
   docs: {
     autodocs: 'tag',
   },
-  typescript: {
-    check: false,
-    reactDocgen: 'react-docgen-typescript',
-    reactDocgenTypescriptOptions: {
-      shouldExtractLiteralValuesFromEnum: true,
-      propFilter: (prop) =>
-        prop.parent ? !/node_modules/.test(prop.parent.fileName) : true,
-    },
-  },
   babel: async (options) => ({
     ...options,
     presets: [
       ...(options.presets || []),
       ['@babel/preset-react', { runtime: 'automatic' }],
-      ['@babel/preset-typescript', { isTSX: true, allExtensions: true }],
     ],
   }),
   webpackFinal: async (config) => {
@@ -48,8 +37,6 @@ const config: StorybookConfig = {
     config.resolve.extensions = [
       ...(config.resolve.extensions || []),
       '.web.js',
-      '.web.ts',
-      '.web.tsx',
     ];
 
     return config;

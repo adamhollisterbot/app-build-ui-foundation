@@ -1,4 +1,4 @@
-import { darkColors, semanticColors } from '../../tokens/colors';
+import { darkColors, semanticColors } from '../../tokens/colors.js';
 
 export const defaultDarkTheme = {
   ...darkColors,

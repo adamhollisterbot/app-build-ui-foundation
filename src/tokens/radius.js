@@ -1,8 +1,8 @@
 /**
  * Border radius tokens
+ * @type {Readonly<{none: 0, xs: 2, sm: 4, md: 8, lg: 12, xl: 16, '2xl': 24, full: 9999}>}
  */
-
-export const radius = {
+export const radius = Object.freeze({
   /** 0px - Sharp corners */
   none: 0,
   /** 2px - Subtle rounding */
@@ -19,6 +19,8 @@ export const radius = {
   '2xl': 24,
   /** Full circle/pill */
   full: 9999,
-} as const;
+});
 
-export type RadiusToken = keyof typeof radius;
+/**
+ * @typedef {keyof typeof radius} RadiusToken
+ */

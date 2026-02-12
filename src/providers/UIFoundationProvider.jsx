@@ -1,32 +1,35 @@
-import React, { createContext, useContext, useMemo, type ReactNode } from 'react';
+import React, { createContext, useContext, useMemo } from 'react';
 import { useColorScheme as useDeviceColorScheme } from 'react-native';
-import { defaultTheme, createTheme } from '../themes';
-import type { Theme, ThemeOverride, ColorScheme } from '../themes/types';
+import { defaultTheme, createTheme } from '../themes/index.js';
 
-interface UIFoundationContextValue {
-  theme: Theme;
-  setColorScheme: (scheme: ColorScheme) => void;
-}
+/**
+ * @typedef {Object} UIFoundationContextValue
+ * @property {import('../themes/utils.js').Theme} theme - Current theme object
+ * @property {(scheme: import('../themes/utils.js').ColorScheme) => void} setColorScheme - Function to change color scheme
+ */
 
-const UIFoundationContext = createContext<UIFoundationContextValue | null>(null);
+/** @type {React.Context<UIFoundationContextValue | null>} */
+const UIFoundationContext = createContext(null);
 
-export interface UIFoundationProviderProps {
-  children: ReactNode;
-  /** Custom theme tokens to merge with defaults */
-  themeOverride?: ThemeOverride;
-  /** Initial color scheme preference */
-  colorScheme?: ColorScheme;
-  /** Callback when color scheme changes */
-  onColorSchemeChange?: (scheme: ColorScheme) => void;
-}
+/**
+ * @typedef {Object} UIFoundationProviderProps
+ * @property {React.ReactNode} children
+ * @property {import('../themes/utils.js').ThemeOverride} [themeOverride] - Custom theme tokens to merge with defaults
+ * @property {import('../themes/utils.js').ColorScheme} [colorScheme='system'] - Initial color scheme preference
+ * @property {(scheme: import('../themes/utils.js').ColorScheme) => void} [onColorSchemeChange] - Callback when color scheme changes
+ */
 
+/**
+ * UI Foundation Provider
+ * @param {UIFoundationProviderProps} props
+ */
 export function UIFoundationProvider({
   children,
   themeOverride,
   colorScheme = 'system',
   onColorSchemeChange,
-}: UIFoundationProviderProps) {
-  const [scheme, setScheme] = React.useState<ColorScheme>(colorScheme);
+}) {
+  const [scheme, setScheme] = React.useState(colorScheme);
   const deviceScheme = useDeviceColorScheme();
 
   // Resolve actual mode from scheme preference
@@ -44,7 +47,7 @@ export function UIFoundationProvider({
 
   // Scheme setter
   const setColorScheme = React.useCallback(
-    (newScheme: ColorScheme) => {
+    (newScheme) => {
       setScheme(newScheme);
       onColorSchemeChange?.(newScheme);
     },
@@ -70,6 +73,10 @@ export function useUIFoundation() {
   return context;
 }
 
-export function useTheme(): Theme {
+/**
+ * Get current theme
+ * @returns {import('../themes/utils.js').Theme}
+ */
+export function useTheme() {
   return useUIFoundation().theme;
 }

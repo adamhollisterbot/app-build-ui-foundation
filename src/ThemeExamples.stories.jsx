@@ -1,10 +1,10 @@
 import React from 'react';
-import { Meta, StoryObj } from '@storybook/react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { UIFoundationProvider, useTheme } from './providers';
-import { Button } from './components/atoms/Button';
-import { TextInput } from './components/inputs/TextInput';
+import { UIFoundationProvider, useTheme } from './providers/index.jsx';
+import { Button } from './components/atoms/Button/index.js';
+import { TextInput } from './components/inputs/TextInput/index.js';
 
+/** @type {import('@storybook/react').Meta} */
 const meta = {
   title: 'Theming/Theme Examples',
   parameters: {
@@ -13,7 +13,6 @@ const meta = {
 };
 
 export default meta;
-// type Story = StoryObj<typeof meta>;
 
 // Demo App Component
 const DemoApp = () => {
