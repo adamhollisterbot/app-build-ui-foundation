@@ -14,48 +14,45 @@ const meta = {
 
 export default meta;
 
-/**
- * TactileCard - Demonstrates the polished, native-feeling card with depth
- */
+// Tactile Card Component - demonstrates dimensional depth on surfaces
 const TactileCard = ({ children, style }) => {
   const theme = useTheme();
   const isDark = theme.mode === 'dark';
   
-  // Tactile shadow and border treatment
-  const cardShadow = isDark
-    ? {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.35,
-        shadowRadius: 12,
-        elevation: 4,
-      }
-    : {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.08,
-        shadowRadius: 12,
-        elevation: 3,
-      };
-
+  // Get tactile tokens
+  const tactileCard = isDark ? theme.tactile?.dark?.card : theme.tactile?.light?.card;
+  const shadows = theme.tactile?.shadows;
+  
   return (
     <View
       style={[
-        styles.card,
+        styles.tactileCard,
         {
           backgroundColor: theme.colors.surface.primary,
           borderRadius: theme.radius.lg,
-          // Tactile border: top lighter, bottom darker for 3D effect
+          // Tactile dimensional border
           borderWidth: 1,
-          borderTopColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.9)',
-          borderLeftColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(255, 255, 255, 0.5)',
+          borderTopColor: tactileCard?.borderTop || (isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.9)'),
+          borderBottomColor: tactileCard?.borderBottom || (isDark ? 'rgba(0, 0, 0, 0.35)' : 'rgba(0, 0, 0, 0.1)'),
+          borderLeftColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.04)',
           borderRightColor: isDark ? 'rgba(0, 0, 0, 0.15)' : 'rgba(0, 0, 0, 0.04)',
-          borderBottomColor: isDark ? 'rgba(0, 0, 0, 0.3)' : 'rgba(0, 0, 0, 0.08)',
         },
-        cardShadow,
+        // Card shadow for elevation
+        isDark ? shadows?.cardDark : shadows?.cardLight,
         style,
       ]}
     >
+      {/* Top highlight edge */}
+      <View
+        style={[
+          styles.cardTopHighlight,
+          {
+            backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.7)',
+            borderTopLeftRadius: theme.radius.lg - 1,
+            borderTopRightRadius: theme.radius.lg - 1,
+          },
+        ]}
+      />
       {children}
     </View>
   );
@@ -74,19 +71,13 @@ const DemoApp = () => {
       ]}
     >
       <View style={styles.content}>
-        {/* Header - Fixed layout with proper spacing */}
+        {/* Header */}
         <View
           style={[
             styles.header,
             {
               backgroundColor: theme.colors.surface.primary,
               borderBottomColor: theme.colors.border.default,
-              // Subtle bottom shadow for depth
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: isDark ? 0.3 : 0.05,
-              shadowRadius: 4,
-              elevation: 2,
             },
           ]}
         >
@@ -109,21 +100,32 @@ const DemoApp = () => {
             >
               Polished, native-feeling UI
             </Text>
-          </View>
-          <View style={styles.headerBadge}>
-            <Text style={[
-              styles.badgeText,
-              { 
-                color: isDark ? theme.colors.semantic.primary.light : theme.colors.semantic.primary.main,
-                backgroundColor: isDark ? 'rgba(59, 130, 246, 0.2)' : 'rgba(37, 99, 235, 0.1)',
-              }
-            ]}>
-              {isDark ? '🌙 Dark Mode' : '☀️ Light Mode'}
-            </Text>
+            <View
+              style={[
+                styles.themeBadge,
+                {
+                  backgroundColor: isDark
+                    ? 'rgba(255, 255, 255, 0.1)'
+                    : 'rgba(0, 0, 0, 0.06)',
+                  borderColor: isDark
+                    ? 'rgba(255, 255, 255, 0.15)'
+                    : 'rgba(0, 0, 0, 0.1)',
+                },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.themeBadgeText,
+                  { color: theme.colors.text.secondary },
+                ]}
+              >
+                {isDark ? '🌙 Dark' : '☀️ Light'}
+              </Text>
+            </View>
           </View>
         </View>
 
-        {/* Sign In Card with Tactile Depth */}
+        {/* Sign In Card - demonstrates tactile depth on cards */}
         <TactileCard>
           <Text
             style={[
@@ -175,21 +177,25 @@ const DemoApp = () => {
           </View>
         </TactileCard>
 
-        {/* Status Cards with Theme-Specific Styling */}
+        {/* Status Cards */}
         <View style={styles.statusCards}>
           <View
             style={[
               styles.statusCard,
               {
-                backgroundColor: isDark 
-                  ? 'rgba(22, 163, 74, 0.15)' 
+                backgroundColor: isDark
+                  ? theme.colors.semantic.success.main + '20'
                   : theme.colors.semantic.success.background,
                 borderColor: isDark
-                  ? 'rgba(34, 197, 94, 0.3)'
+                  ? theme.colors.semantic.success.main + '40'
                   : theme.colors.semantic.success.light,
-                // Tactile borders
-                borderTopColor: isDark ? 'rgba(34, 197, 94, 0.2)' : 'rgba(255, 255, 255, 0.8)',
-                borderBottomColor: isDark ? 'rgba(0, 0, 0, 0.2)' : 'rgba(0, 0, 0, 0.05)',
+                // Tactile border
+                borderTopColor: isDark
+                  ? theme.colors.semantic.success.light + '30'
+                  : theme.colors.semantic.success.light,
+                borderBottomColor: isDark
+                  ? 'rgba(0, 0, 0, 0.3)'
+                  : theme.colors.semantic.success.dark + '20',
               },
             ]}
           >
@@ -197,7 +203,9 @@ const DemoApp = () => {
             <Text
               style={[
                 styles.statusTitle,
-                { color: isDark ? theme.colors.semantic.success.light : theme.colors.semantic.success.dark },
+                { color: isDark 
+                  ? theme.colors.semantic.success.light 
+                  : theme.colors.semantic.success.dark },
               ]}
             >
               Success
@@ -217,13 +225,18 @@ const DemoApp = () => {
               styles.statusCard,
               {
                 backgroundColor: isDark
-                  ? 'rgba(202, 138, 4, 0.15)'
+                  ? theme.colors.semantic.warning.main + '20'
                   : theme.colors.semantic.warning.background,
                 borderColor: isDark
-                  ? 'rgba(234, 179, 8, 0.3)'
+                  ? theme.colors.semantic.warning.main + '40'
                   : theme.colors.semantic.warning.light,
-                borderTopColor: isDark ? 'rgba(234, 179, 8, 0.2)' : 'rgba(255, 255, 255, 0.8)',
-                borderBottomColor: isDark ? 'rgba(0, 0, 0, 0.2)' : 'rgba(0, 0, 0, 0.05)',
+                // Tactile border
+                borderTopColor: isDark
+                  ? theme.colors.semantic.warning.light + '30'
+                  : theme.colors.semantic.warning.light,
+                borderBottomColor: isDark
+                  ? 'rgba(0, 0, 0, 0.3)'
+                  : theme.colors.semantic.warning.dark + '20',
               },
             ]}
           >
@@ -231,7 +244,9 @@ const DemoApp = () => {
             <Text
               style={[
                 styles.statusTitle,
-                { color: isDark ? theme.colors.semantic.warning.light : theme.colors.semantic.warning.dark },
+                { color: isDark 
+                  ? theme.colors.semantic.warning.light 
+                  : theme.colors.semantic.warning.dark },
               ]}
             >
               Warning
@@ -251,13 +266,18 @@ const DemoApp = () => {
               styles.statusCard,
               {
                 backgroundColor: isDark
-                  ? 'rgba(220, 38, 38, 0.15)'
+                  ? theme.colors.semantic.error.main + '20'
                   : theme.colors.semantic.error.background,
                 borderColor: isDark
-                  ? 'rgba(239, 68, 68, 0.3)'
+                  ? theme.colors.semantic.error.main + '40'
                   : theme.colors.semantic.error.light,
-                borderTopColor: isDark ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255, 255, 255, 0.8)',
-                borderBottomColor: isDark ? 'rgba(0, 0, 0, 0.2)' : 'rgba(0, 0, 0, 0.05)',
+                // Tactile border
+                borderTopColor: isDark
+                  ? theme.colors.semantic.error.light + '30'
+                  : theme.colors.semantic.error.light,
+                borderBottomColor: isDark
+                  ? 'rgba(0, 0, 0, 0.3)'
+                  : theme.colors.semantic.error.dark + '20',
               },
             ]}
           >
@@ -265,7 +285,9 @@ const DemoApp = () => {
             <Text
               style={[
                 styles.statusTitle,
-                { color: isDark ? theme.colors.semantic.error.light : theme.colors.semantic.error.dark },
+                { color: isDark 
+                  ? theme.colors.semantic.error.light 
+                  : theme.colors.semantic.error.dark },
               ]}
             >
               Error
@@ -299,7 +321,7 @@ const DemoApp = () => {
               theme.textStyles.bodySmall,
             ]}
           >
-            Notice the subtle 3D depth - borders with gradients, shadows, and highlights
+            Subtle dimensionality with light/shadow edges
           </Text>
           
           <View style={styles.buttonGrid}>
@@ -310,8 +332,8 @@ const DemoApp = () => {
           </View>
         </TactileCard>
 
-        {/* Input Showcase */}
-        <TactileCard>
+        {/* Tactile Design Principles */}
+        <TactileCard style={{ marginBottom: 40 }}>
           <Text
             style={[
               styles.cardTitle,
@@ -319,33 +341,45 @@ const DemoApp = () => {
               theme.textStyles.headlineMedium,
             ]}
           >
-            Tactile Inputs
-          </Text>
-          <Text
-            style={[
-              styles.cardDescription,
-              { color: theme.colors.text.secondary },
-              theme.textStyles.bodySmall,
-            ]}
-          >
-            Inset shadows when idle, glow effects on focus
+            Design Principles
           </Text>
           
-          <View style={styles.form}>
-            <TextInput
-              label="Default Input"
-              placeholder="Click to see focus glow"
-            />
-            <TextInput
-              label="With Helper"
-              placeholder="Enter something..."
-              helperText="This is helper text below the input"
-            />
-            <TextInput
-              label="Error State"
-              placeholder="Invalid input"
-              error="This field has an error"
-            />
+          <View style={styles.principleList}>
+            <View style={styles.principle}>
+              <Text style={[styles.principleEmoji]}>🔲</Text>
+              <View style={styles.principleContent}>
+                <Text style={[styles.principleTitle, { color: theme.colors.text.primary }]}>
+                  Dimensional Borders
+                </Text>
+                <Text style={[styles.principleDesc, { color: theme.colors.text.secondary }]}>
+                  Top edges catch light, bottom edges are in shadow
+                </Text>
+              </View>
+            </View>
+            
+            <View style={styles.principle}>
+              <Text style={[styles.principleEmoji]}>💡</Text>
+              <View style={styles.principleContent}>
+                <Text style={[styles.principleTitle, { color: theme.colors.text.primary }]}>
+                  Raised vs Recessed
+                </Text>
+                <Text style={[styles.principleDesc, { color: theme.colors.text.secondary }]}>
+                  Buttons are raised (light top), inputs are recessed (dark top)
+                </Text>
+              </View>
+            </View>
+            
+            <View style={styles.principle}>
+              <Text style={[styles.principleEmoji]}>🎨</Text>
+              <View style={styles.principleContent}>
+                <Text style={[styles.principleTitle, { color: theme.colors.text.primary }]}>
+                  Neutral Foundation
+                </Text>
+                <Text style={[styles.principleDesc, { color: theme.colors.text.secondary }]}>
+                  No opinionated colors — themes applied per project
+                </Text>
+              </View>
+            </View>
           </View>
         </TactileCard>
       </View>
@@ -376,16 +410,17 @@ export const SideBySide = {
   render: () => (
     <View style={styles.sideBySide}>
       <View style={styles.sideBySidePanel}>
-        <View style={[styles.panelHeader, { backgroundColor: '#F8FAFC', borderBottomColor: '#E2E8F0' }]}>
-          <Text style={[styles.panelTitle, { color: '#1E293B' }]}>☀️ Light Theme</Text>
+        <View style={[styles.panelHeader, { backgroundColor: '#F5F5F5', borderBottomColor: '#E0E0E0' }]}>
+          <Text style={[styles.panelTitle, { color: '#212121' }]}>☀️ Light Theme</Text>
         </View>
         <UIFoundationProvider colorScheme="light">
           <DemoApp />
         </UIFoundationProvider>
       </View>
-      <View style={[styles.sideBySidePanel, { borderLeftWidth: 1, borderLeftColor: '#374151' }]}>
-        <View style={[styles.panelHeader, { backgroundColor: '#1E293B', borderBottomColor: '#374151' }]}>
-          <Text style={[styles.panelTitle, { color: '#F1F5F9' }]}>🌙 Dark Theme</Text>
+      <View style={[styles.sideBySideDivider]} />
+      <View style={styles.sideBySidePanel}>
+        <View style={[styles.panelHeader, { backgroundColor: '#1E1E1E', borderBottomColor: '#333' }]}>
+          <Text style={[styles.panelTitle, { color: '#FAFAFA' }]}>🌙 Dark Theme</Text>
         </View>
         <UIFoundationProvider colorScheme="dark">
           <DemoApp />
@@ -417,11 +452,11 @@ export const CustomTheme = {
       }}
     >
       <View style={{ padding: 40, backgroundColor: '#FAFAFA', minHeight: '100vh' }}>
-        <Text style={{ fontSize: 24, fontWeight: '600', marginBottom: 8, color: '#1E293B' }}>
+        <Text style={{ fontSize: 24, fontWeight: '600', marginBottom: 8, color: '#212121' }}>
           Custom Theme Override
         </Text>
-        <Text style={{ fontSize: 16, marginBottom: 24, color: '#64748B' }}>
-          Primary color overridden to orange - notice the tactile depth is preserved
+        <Text style={{ fontSize: 16, marginBottom: 24, color: '#666' }}>
+          Primary color overridden to orange
         </Text>
         <View style={{ gap: 12 }}>
           <Button variant="filled" color="primary">
@@ -448,38 +483,53 @@ const styles = StyleSheet.create({
     gap: 24,
   },
   header: {
-    padding: 24,
+    paddingVertical: 24,
+    paddingHorizontal: 24,
     borderBottomWidth: 1,
     marginHorizontal: -24,
     marginTop: -24,
-    marginBottom: 8,
+    marginBottom: 0,
   },
   headerTitle: {
     marginBottom: 8,
   },
   headerSubtitleContainer: {
-    marginBottom: 12,
-  },
-  headerSubtitle: {
-    lineHeight: 20,
-  },
-  headerBadge: {
     flexDirection: 'row',
-  },
-  badgeText: {
-    fontSize: 12,
-    fontWeight: '600',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-    overflow: 'hidden',
-  },
-  card: {
-    padding: 24,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
     gap: 12,
   },
+  headerSubtitle: {
+    flex: 1,
+    minWidth: 150,
+  },
+  themeBadge: {
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+  themeBadgeText: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  // Tactile card styles
+  tactileCard: {
+    padding: 24,
+    gap: 12,
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  cardTopHighlight: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 1,
+  },
   cardTitle: {
-    marginBottom: 4,
+    marginBottom: 2,
   },
   cardDescription: {
     marginBottom: 8,
@@ -515,21 +565,54 @@ const styles = StyleSheet.create({
     gap: 12,
     marginTop: 8,
   },
+  // Principles section
+  principleList: {
+    gap: 16,
+    marginTop: 8,
+  },
+  principle: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
+  },
+  principleEmoji: {
+    fontSize: 20,
+    width: 28,
+    textAlign: 'center',
+  },
+  principleContent: {
+    flex: 1,
+  },
+  principleTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 2,
+  },
+  principleDesc: {
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  // Side by side
   sideBySide: {
     flexDirection: 'row',
-    minHeight: '100vh',
+    height: '100vh',
   },
   sideBySidePanel: {
     flex: 1,
-    overflow: 'auto',
+    overflow: 'hidden',
+  },
+  sideBySideDivider: {
+    width: 2,
+    backgroundColor: '#333',
   },
   panelHeader: {
-    padding: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     borderBottomWidth: 1,
-    alignItems: 'center',
   },
   panelTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
+    textAlign: 'center',
   },
 });

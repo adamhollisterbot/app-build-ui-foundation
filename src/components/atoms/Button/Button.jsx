@@ -43,10 +43,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 /**
  * Polished button component with haptic feedback, animations, and tactile depth
- * Features:
- * - Subtle 3D border gradient (top lighter, bottom darker)
- * - Layered shadows for physical presence
- * - Smooth press animations
+ * Buttons are "raised" surfaces - top catches light, bottom is in shadow
  * @param {ButtonProps} props
  */
 export function Button({
@@ -126,13 +123,13 @@ export function Button({
       accessibilityRole="button"
       accessibilityState={{ disabled: isDisabled, busy: loading }}
     >
-      {/* Top highlight edge for dimensional effect - simulates light hitting top edge */}
+      {/* Top highlight edge for dimensional effect - only on raised buttons */}
       {(variant === 'filled' || variant === 'soft') && !isDisabled && (
         <View 
           style={[
             styles.topHighlight, 
             { 
-              backgroundColor: variantStyles.topHighlightColor,
+              backgroundColor: variantStyles.topEdgeColor,
               borderTopLeftRadius: sizeStyles.container.borderRadius,
               borderTopRightRadius: sizeStyles.container.borderRadius,
             }
@@ -143,8 +140,8 @@ export function Button({
       {loading ? (
         <ActivityIndicator size="small" color={variantStyles.textColor} />
       ) : (
-        <View style={styles.content}>
-          {leftIcon && <View style={styles.iconLeft}>{leftIcon}</View>}
+        <>
+          {leftIcon && <>{leftIcon}</>}
           <Text
             style={[
               styles.text,
@@ -155,17 +152,17 @@ export function Button({
           >
             {children}
           </Text>
-          {rightIcon && <View style={styles.iconRight}>{rightIcon}</View>}
-        </View>
+          {rightIcon && <>{rightIcon}</>}
+        </>
       )}
       
-      {/* Bottom shadow edge for dimensional effect - simulates shadow at bottom */}
+      {/* Bottom shadow edge for dimensional effect */}
       {(variant === 'filled' || variant === 'soft') && !isDisabled && (
         <View 
           style={[
             styles.bottomShadow, 
             { 
-              backgroundColor: variantStyles.bottomShadowColor,
+              backgroundColor: variantStyles.bottomEdgeColor,
               borderBottomLeftRadius: sizeStyles.container.borderRadius,
               borderBottomRightRadius: sizeStyles.container.borderRadius,
             }
@@ -181,9 +178,9 @@ function getSizeStyles(size, theme) {
   const sizes = {
     sm: {
       container: {
-        paddingVertical: theme.spacing.xs + 2, // Extra padding for highlight/shadow edges
+        paddingVertical: theme.spacing.xs,
         paddingHorizontal: theme.spacing.sm,
-        minHeight: 34,
+        minHeight: 32,
         borderRadius: theme.radius.sm,
         gap: theme.spacing.xs,
       },
@@ -194,9 +191,9 @@ function getSizeStyles(size, theme) {
     },
     md: {
       container: {
-        paddingVertical: theme.spacing.sm + 2, // Extra padding for highlight/shadow edges
+        paddingVertical: theme.spacing.sm,
         paddingHorizontal: theme.spacing.lg,
-        minHeight: 46, // Slightly taller to accommodate edges
+        minHeight: 44, // iOS minimum
         borderRadius: theme.radius.md,
         gap: theme.spacing.sm,
       },
@@ -207,9 +204,9 @@ function getSizeStyles(size, theme) {
     },
     lg: {
       container: {
-        paddingVertical: theme.spacing.md + 2, // Extra padding for highlight/shadow edges
+        paddingVertical: theme.spacing.md,
         paddingHorizontal: theme.spacing.xl,
-        minHeight: 54,
+        minHeight: 52,
         borderRadius: theme.radius.lg,
         gap: theme.spacing.sm,
       },
@@ -225,20 +222,18 @@ function getSizeStyles(size, theme) {
 function getVariantStyles(variant, colorValues, disabled, theme, isDark) {
   const opacity = disabled ? 0.5 : 1;
   
-  // Get tactile tokens if available
+  // Get tactile tokens
   const tactile = isDark ? theme.tactile?.dark?.button : theme.tactile?.light?.button;
   
-  // Tactile border/highlight colors for dimensional effect
-  // Top edge catches light (lighter), bottom edge in shadow (darker)
-  const topHighlightColor = tactile?.borderTop || (isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(255, 255, 255, 0.35)');
-  const bottomShadowColor = tactile?.borderBottom || (isDark ? 'rgba(0, 0, 0, 0.35)' : 'rgba(0, 0, 0, 0.12)');
-  
-  // Side border colors for smooth gradient effect
-  const sideHighlightColor = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(255, 255, 255, 0.2)';
-  const sideShadowColor = isDark ? 'rgba(0, 0, 0, 0.15)' : 'rgba(0, 0, 0, 0.06)';
+  // Tactile edge colors for dimensional "raised surface" effect
+  // Top edge catches light (lighter), bottom is in shadow (darker)
+  const topEdgeLight = tactile?.borderTop || 'rgba(255, 255, 255, 0.35)';
+  const bottomEdgeLight = tactile?.borderBottom || 'rgba(0, 0, 0, 0.2)';
+  const topEdgeDark = tactile?.borderTop || 'rgba(255, 255, 255, 0.18)';
+  const bottomEdgeDark = tactile?.borderBottom || 'rgba(0, 0, 0, 0.45)';
 
   // Shadow for depth - more pronounced in dark mode
-  const filledShadow = isDark
+  const buttonShadow = isDark
     ? {
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 3 },
@@ -250,25 +245,8 @@ function getVariantStyles(variant, colorValues, disabled, theme, isDark) {
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.15,
-        shadowRadius: 3,
+        shadowRadius: 4,
         elevation: 3,
-      };
-
-  // Soft shadow - lighter
-  const softShadow = isDark
-    ? {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.25,
-        shadowRadius: 2,
-        elevation: 2,
-      }
-    : {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.08,
-        shadowRadius: 2,
-        elevation: 1,
       };
 
   const variants = {
@@ -277,66 +255,64 @@ function getVariantStyles(variant, colorValues, disabled, theme, isDark) {
         backgroundColor: colorValues.main,
         opacity,
         overflow: 'hidden',
-        position: 'relative',
-        // Multi-directional border for 3D effect
+        // Dimensional border - top lighter, bottom darker, sides gradient
         borderWidth: 1,
-        borderTopColor: topHighlightColor,
-        borderLeftColor: sideHighlightColor,
-        borderRightColor: sideShadowColor,
-        borderBottomColor: bottomShadowColor,
+        borderTopColor: isDark ? topEdgeDark : topEdgeLight,
+        borderLeftColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.12)',
+        borderRightColor: isDark ? 'rgba(0, 0, 0, 0.2)' : 'rgba(0, 0, 0, 0.08)',
+        borderBottomColor: isDark ? bottomEdgeDark : bottomEdgeLight,
       },
-      shadow: disabled ? {} : filledShadow,
+      shadow: disabled ? {} : buttonShadow,
       textColor: colorValues.contrast,
-      topHighlightColor: 'rgba(255, 255, 255, 0.15)',
-      bottomShadowColor: 'rgba(0, 0, 0, 0.15)',
+      topEdgeColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(255, 255, 255, 0.25)',
+      bottomEdgeColor: isDark ? 'rgba(0, 0, 0, 0.25)' : 'rgba(0, 0, 0, 0.12)',
     },
     outlined: {
       container: {
         backgroundColor: 'transparent',
         borderWidth: 1.5,
-        borderColor: colorValues.main,
         opacity,
-        // Subtle dimensional border variation
+        // Subtle dimensional border for outlined
         borderTopColor: isDark ? colorValues.light : colorValues.main,
-        borderBottomColor: isDark ? colorValues.dark : colorValues.main,
+        borderBottomColor: isDark ? colorValues.dark : colorValues.dark,
         borderLeftColor: colorValues.main,
         borderRightColor: colorValues.main,
       },
       shadow: {},
       textColor: colorValues.main,
-      topHighlightColor: 'transparent',
-      bottomShadowColor: 'transparent',
+      topEdgeColor: 'transparent',
+      bottomEdgeColor: 'transparent',
     },
     ghost: {
       container: {
         backgroundColor: 'transparent',
         opacity,
+        // No border for ghost
         borderWidth: 0,
       },
       shadow: {},
       textColor: colorValues.main,
-      topHighlightColor: 'transparent',
-      bottomShadowColor: 'transparent',
+      topEdgeColor: 'transparent',
+      bottomEdgeColor: 'transparent',
     },
     soft: {
       container: {
         backgroundColor: isDark 
-          ? colorValues.main + '25' // 15% opacity in dark
-          : colorValues.light + '20', // 12% opacity in light
+          ? colorValues.main + '25' // 15% opacity in dark mode
+          : colorValues.light + '30', // 19% opacity in light
         opacity,
         overflow: 'hidden',
-        position: 'relative',
-        // Subtle border for definition
+        // Subtle dimensional border
         borderWidth: 1,
-        borderTopColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.6)',
-        borderLeftColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(255, 255, 255, 0.3)',
+        borderTopColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.6)',
+        borderBottomColor: isDark ? 'rgba(0, 0, 0, 0.2)' : 'rgba(0, 0, 0, 0.08)',
+        borderLeftColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
         borderRightColor: isDark ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.03)',
-        borderBottomColor: isDark ? 'rgba(0, 0, 0, 0.15)' : 'rgba(0, 0, 0, 0.05)',
       },
-      shadow: disabled ? {} : softShadow,
+      shadow: {},
       textColor: colorValues.main,
-      topHighlightColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.4)',
-      bottomShadowColor: isDark ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.03)',
+      topEdgeColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(255, 255, 255, 0.4)',
+      bottomEdgeColor: isDark ? 'rgba(0, 0, 0, 0.15)' : 'rgba(0, 0, 0, 0.06)',
     },
   };
 
@@ -353,21 +329,10 @@ const styles = StyleSheet.create({
   fullWidth: {
     width: '100%',
   },
-  content: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   text: {
     textAlign: 'center',
   },
-  iconLeft: {
-    marginRight: 6,
-  },
-  iconRight: {
-    marginLeft: 6,
-  },
-  // Tactile highlight edge overlays - these add the subtle 3D effect
+  // Tactile highlight edge overlays for dimensional depth
   topHighlight: {
     position: 'absolute',
     top: 0,
