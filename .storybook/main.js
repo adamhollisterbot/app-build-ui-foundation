@@ -1,3 +1,5 @@
+const path = require('path');
+
 /** @type {import('@storybook/react-webpack5').StorybookConfig} */
 const config = {
   stories: ['../src/**/*.stories.@(js|jsx|mjs)'],
@@ -31,6 +33,10 @@ const config = {
       ...config.resolve.alias,
       'react-native$': 'react-native-web',
       'react-native/Libraries/Animated/Easing': 'react-native-web/dist/vendor/react-native/Animated/Easing',
+      // Mock react-native-reanimated
+      'react-native-reanimated': path.resolve(__dirname, '__mocks__/react-native-reanimated.js'),
+      // Mock expo-haptics
+      'expo-haptics': path.resolve(__dirname, '__mocks__/expo-haptics.js'),
     };
 
     // Handle react-native-reanimated
@@ -39,8 +45,22 @@ const config = {
       '.web.js',
     ];
 
+    // Add babel-loader for source JSX files
+    config.module.rules.push({
+      test: /\.(js|jsx)$/,
+      exclude: /node_modules/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: [
+            ['@babel/preset-react', { runtime: 'automatic' }],
+          ],
+        },
+      },
+    });
+
     return config;
   },
 };
 
-export default config;
+module.exports = config;
