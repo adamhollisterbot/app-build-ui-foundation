@@ -218,10 +218,31 @@ Animation timing and springs for consistent motion
 
 All other `TextInput` props from React Native are supported.
 
+## Storybook
+
+Explore all components and design tokens interactively:
+
+```bash
+# Run Storybook locally
+npm run storybook
+
+# Build for deployment
+npm run build-storybook
+```
+
+Storybook includes:
+- 📦 Interactive component playground
+- 🎨 Complete design token showcase
+- 🌓 Live light/dark theme switcher
+- 📖 Full component documentation
+
+See [STORYBOOK.md](./STORYBOOK.md) for detailed documentation.
+
 ## Documentation
 
 - [Design Specification](./docs/DESIGN_SPEC.md) - Complete design philosophy and token system
 - [Theming Guide](./docs/THEMING_GUIDE.md) - How to create custom themes
+- [Storybook Guide](./STORYBOOK.md) - Component browser and interactive documentation
 
 ## License
 
