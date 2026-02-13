@@ -18,11 +18,14 @@ export default meta;
 const TactileCard = ({ children, style }) => {
   const theme = useTheme();
   const isDark = theme.mode === 'dark';
-  
+
   // Get tactile tokens
   const tactileCard = isDark ? theme.tactile?.dark?.card : theme.tactile?.light?.card;
   const shadows = theme.tactile?.shadows;
-  
+
+  // Background tint for shadow depth effect
+  const shadowBackground = tactileCard?.shadowBackground || (isDark ? 'rgba(0, 0, 0, 0.15)' : 'rgba(0, 0, 0, 0.02)');
+
   return (
     <View
       style={[
@@ -42,6 +45,17 @@ const TactileCard = ({ children, style }) => {
         style,
       ]}
     >
+      {/* Background tint for shadow depth */}
+      <View
+        style={[
+          styles.shadowBackground,
+          {
+            backgroundColor: shadowBackground,
+            borderRadius: theme.radius.lg,
+          },
+        ]}
+      />
+
       {/* Top highlight edge */}
       <View
         style={[
@@ -189,13 +203,6 @@ const DemoApp = () => {
                 borderColor: isDark
                   ? theme.colors.semantic.success.main + '40'
                   : theme.colors.semantic.success.light,
-                // Tactile border
-                borderTopColor: isDark
-                  ? theme.colors.semantic.success.light + '30'
-                  : theme.colors.semantic.success.light,
-                borderBottomColor: isDark
-                  ? 'rgba(0, 0, 0, 0.3)'
-                  : theme.colors.semantic.success.dark + '20',
               },
             ]}
           >
@@ -203,8 +210,8 @@ const DemoApp = () => {
             <Text
               style={[
                 styles.statusTitle,
-                { color: isDark 
-                  ? theme.colors.semantic.success.light 
+                { color: isDark
+                  ? theme.colors.semantic.success.light
                   : theme.colors.semantic.success.dark },
               ]}
             >
@@ -230,13 +237,6 @@ const DemoApp = () => {
                 borderColor: isDark
                   ? theme.colors.semantic.warning.main + '40'
                   : theme.colors.semantic.warning.light,
-                // Tactile border
-                borderTopColor: isDark
-                  ? theme.colors.semantic.warning.light + '30'
-                  : theme.colors.semantic.warning.light,
-                borderBottomColor: isDark
-                  ? 'rgba(0, 0, 0, 0.3)'
-                  : theme.colors.semantic.warning.dark + '20',
               },
             ]}
           >
@@ -244,8 +244,8 @@ const DemoApp = () => {
             <Text
               style={[
                 styles.statusTitle,
-                { color: isDark 
-                  ? theme.colors.semantic.warning.light 
+                { color: isDark
+                  ? theme.colors.semantic.warning.light
                   : theme.colors.semantic.warning.dark },
               ]}
             >
@@ -271,13 +271,6 @@ const DemoApp = () => {
                 borderColor: isDark
                   ? theme.colors.semantic.error.main + '40'
                   : theme.colors.semantic.error.light,
-                // Tactile border
-                borderTopColor: isDark
-                  ? theme.colors.semantic.error.light + '30'
-                  : theme.colors.semantic.error.light,
-                borderBottomColor: isDark
-                  ? 'rgba(0, 0, 0, 0.3)'
-                  : theme.colors.semantic.error.dark + '20',
               },
             ]}
           >
@@ -285,8 +278,8 @@ const DemoApp = () => {
             <Text
               style={[
                 styles.statusTitle,
-                { color: isDark 
-                  ? theme.colors.semantic.error.light 
+                { color: isDark
+                  ? theme.colors.semantic.error.light
                   : theme.colors.semantic.error.dark },
               ]}
             >
@@ -480,10 +473,10 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 24,
-    gap: 24,
+    gap: 32,
   },
   header: {
-    paddingVertical: 24,
+    paddingVertical: 32,
     paddingHorizontal: 24,
     borderBottomWidth: 1,
     marginHorizontal: -24,
@@ -491,18 +484,19 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   headerTitle: {
-    marginBottom: 8,
+    marginBottom: 12,
   },
   headerSubtitleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
-    gap: 12,
+    gap: 16,
   },
   headerSubtitle: {
     flex: 1,
     minWidth: 150,
+    marginRight: 8,
   },
   themeBadge: {
     paddingVertical: 4,
@@ -517,9 +511,17 @@ const styles = StyleSheet.create({
   // Tactile card styles
   tactileCard: {
     padding: 24,
-    gap: 12,
+    gap: 16,
     overflow: 'hidden',
     position: 'relative',
+  },
+  shadowBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: -1,
   },
   cardTopHighlight: {
     position: 'absolute',
@@ -529,18 +531,18 @@ const styles = StyleSheet.create({
     height: 1,
   },
   cardTitle: {
-    marginBottom: 2,
+    marginBottom: 6,
   },
   cardDescription: {
-    marginBottom: 8,
+    marginBottom: 12,
   },
   form: {
-    gap: 16,
-    marginTop: 8,
+    gap: 20,
+    marginTop: 12,
   },
   statusCards: {
     flexDirection: 'row',
-    gap: 12,
+    gap: 16,
     flexWrap: 'wrap',
   },
   statusCard: {
@@ -562,13 +564,13 @@ const styles = StyleSheet.create({
   buttonGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
-    marginTop: 8,
+    gap: 16,
+    marginTop: 12,
   },
   // Principles section
   principleList: {
-    gap: 16,
-    marginTop: 8,
+    gap: 20,
+    marginTop: 12,
   },
   principle: {
     flexDirection: 'row',

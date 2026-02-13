@@ -51,6 +51,8 @@ export const lightTactile = Object.freeze({
     borderBottom: 'rgba(0, 0, 0, 0.08)',
     // Hover lift shadow
     hoverShadow: '0 2px 8px rgba(0, 0, 0, 0.1), 0 8px 24px rgba(0, 0, 0, 0.08)',
+    // Background tint behind shadows for depth effect
+    shadowBackground: 'rgba(0, 0, 0, 0.02)',
   },
 });
 
@@ -92,6 +94,8 @@ export const darkTactile = Object.freeze({
     borderBottom: 'rgba(0, 0, 0, 0.3)',
     // Hover lift shadow
     hoverShadow: '0 2px 8px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.3)',
+    // Background tint behind shadows for depth effect
+    shadowBackground: 'rgba(0, 0, 0, 0.15)',
   },
 });
 

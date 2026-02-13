@@ -26,11 +26,11 @@ export const palette = {
 
 // Semantic colors (these get themed)
 export const semanticColors = {
-  // Primary action color (themed)
+  // Primary action color (themed) - slightly desaturated for softer look
   primary: {
-    main: '#2563EB', // Blue 600
-    light: '#3B82F6', // Blue 500
-    dark: '#1D4ED8', // Blue 700
+    main: '#4285F4', // Softer, more approachable blue
+    light: '#5A95F5',
+    dark: '#3367D6',
     contrast: '#FFFFFF',
   },
   // Secondary/accent color (themed)

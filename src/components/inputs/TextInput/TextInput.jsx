@@ -130,10 +130,8 @@ export const TextInput = forwardRef(function TextInput(
               ? theme.colors.background.tertiary
               : theme.colors.surface.primary,
             borderRadius: theme.radius.md,
-            // Tactile dimensional border
+            // Clean solid border
             borderWidth: 1,
-            borderTopWidth: 1.5,
-            borderBottomWidth: 1.5,
             borderTopColor,
             borderBottomColor,
             borderLeftColor: borderSideColor,
@@ -145,22 +143,6 @@ export const TextInput = forwardRef(function TextInput(
           insetShadow,
         ]}
       >
-        {/* Inner highlight for subtle dimension */}
-        {!disabled && !isFocused && (
-          <View
-            style={[
-              styles.innerHighlight,
-              {
-                backgroundColor: isDark
-                  ? 'rgba(0, 0, 0, 0.15)'
-                  : 'rgba(0, 0, 0, 0.02)',
-                borderTopLeftRadius: theme.radius.md - 1,
-                borderTopRightRadius: theme.radius.md - 1,
-              },
-            ]}
-          />
-        )}
-
         {leftElement && <View style={styles.leftElement}>{leftElement}</View>}
 
         <RNTextInput
@@ -207,22 +189,13 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   label: {
-    marginBottom: 6,
+    marginBottom: 8,
   },
   container: {
     flexDirection: 'row',
     alignItems: 'center',
     minHeight: 48,
     paddingHorizontal: 12,
-    overflow: 'hidden',
-    position: 'relative',
-  },
-  innerHighlight: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: 20,
   },
   input: {
     flex: 1,
@@ -235,6 +208,6 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   helperText: {
-    marginTop: 4,
+    marginTop: 6,
   },
 });

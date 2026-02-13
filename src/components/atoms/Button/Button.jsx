@@ -66,6 +66,7 @@ export function Button({
   const theme = useTheme();
   const reducedMotion = useReducedMotion();
   const scale = useSharedValue(1);
+  const [isHovered, setIsHovered] = React.useState(false);
 
   // Get color values from theme
   const colorValues = theme.colors.semantic[color];
@@ -100,7 +101,7 @@ export function Button({
   const sizeStyles = getSizeStyles(size, theme);
 
   // Variant styles with tactile depth
-  const variantStyles = getVariantStyles(variant, colorValues, disabled, theme, isDark);
+  const variantStyles = getVariantStyles(variant, colorValues, disabled, theme, isDark, isHovered);
 
   const isDisabled = disabled || loading;
 
@@ -111,6 +112,8 @@ export function Button({
       onPress={onPress}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
+      onHoverIn={() => !isDisabled && setIsHovered(true)}
+      onHoverOut={() => setIsHovered(false)}
       style={[
         styles.base,
         sizeStyles.container,
@@ -125,18 +128,18 @@ export function Button({
     >
       {/* Top highlight edge for dimensional effect - only on raised buttons */}
       {(variant === 'filled' || variant === 'soft') && !isDisabled && (
-        <View 
+        <View
           style={[
-            styles.topHighlight, 
-            { 
+            styles.topHighlight,
+            {
               backgroundColor: variantStyles.topEdgeColor,
               borderTopLeftRadius: sizeStyles.container.borderRadius,
               borderTopRightRadius: sizeStyles.container.borderRadius,
             }
-          ]} 
+          ]}
         />
       )}
-      
+
       {loading ? (
         <ActivityIndicator size="small" color={variantStyles.textColor} />
       ) : (
@@ -155,18 +158,18 @@ export function Button({
           {rightIcon && <>{rightIcon}</>}
         </>
       )}
-      
+
       {/* Bottom shadow edge for dimensional effect */}
       {(variant === 'filled' || variant === 'soft') && !isDisabled && (
-        <View 
+        <View
           style={[
-            styles.bottomShadow, 
-            { 
+            styles.bottomShadow,
+            {
               backgroundColor: variantStyles.bottomEdgeColor,
               borderBottomLeftRadius: sizeStyles.container.borderRadius,
               borderBottomRightRadius: sizeStyles.container.borderRadius,
             }
-          ]} 
+          ]}
         />
       )}
     </AnimatedPressable>
@@ -219,12 +222,12 @@ function getSizeStyles(size, theme) {
   return sizes[size];
 }
 
-function getVariantStyles(variant, colorValues, disabled, theme, isDark) {
+function getVariantStyles(variant, colorValues, disabled, theme, isDark, isHovered = false) {
   const opacity = disabled ? 0.5 : 1;
-  
+
   // Get tactile tokens
   const tactile = isDark ? theme.tactile?.dark?.button : theme.tactile?.light?.button;
-  
+
   // Tactile edge colors for dimensional "raised surface" effect
   // Top edge catches light (lighter), bottom is in shadow (darker)
   const topEdgeLight = tactile?.borderTop || 'rgba(255, 255, 255, 0.35)';
@@ -232,44 +235,58 @@ function getVariantStyles(variant, colorValues, disabled, theme, isDark) {
   const topEdgeDark = tactile?.borderTop || 'rgba(255, 255, 255, 0.18)';
   const bottomEdgeDark = tactile?.borderBottom || 'rgba(0, 0, 0, 0.45)';
 
-  // Shadow for depth - more pronounced in dark mode
+  // Hover state - brighter highlight, more lift
+  const hoverTopEdgeLight = 'rgba(255, 255, 255, 0.45)';
+  const hoverBottomEdgeLight = 'rgba(0, 0, 0, 0.12)';
+  const hoverTopEdgeDark = 'rgba(255, 255, 255, 0.25)';
+  const hoverBottomEdgeDark = 'rgba(0, 0, 0, 0.35)';
+
+  // Shadow for depth - more pronounced in dark mode and hover
   const buttonShadow = isDark
     ? {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.4,
-        shadowRadius: 4,
-        elevation: 4,
+        shadowOffset: { width: 0, height: isHovered ? 4 : 3 },
+        shadowOpacity: isHovered ? 0.5 : 0.4,
+        shadowRadius: isHovered ? 6 : 4,
+        elevation: isHovered ? 6 : 4,
       }
     : {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.15,
-        shadowRadius: 4,
-        elevation: 3,
+        shadowOffset: { width: 0, height: isHovered ? 3 : 2 },
+        shadowOpacity: isHovered ? 0.2 : 0.15,
+        shadowRadius: isHovered ? 6 : 4,
+        elevation: isHovered ? 5 : 3,
       };
 
   const variants = {
     filled: {
       container: {
-        backgroundColor: colorValues.main,
+        backgroundColor: isHovered && !disabled ? colorValues.light : colorValues.main,
         opacity,
         overflow: 'hidden',
         // Dimensional border - top lighter, bottom darker, sides gradient
         borderWidth: 1,
-        borderTopColor: isDark ? topEdgeDark : topEdgeLight,
+        borderTopColor: isDark
+          ? (isHovered ? hoverTopEdgeDark : topEdgeDark)
+          : (isHovered ? hoverTopEdgeLight : topEdgeLight),
         borderLeftColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.12)',
         borderRightColor: isDark ? 'rgba(0, 0, 0, 0.2)' : 'rgba(0, 0, 0, 0.08)',
-        borderBottomColor: isDark ? bottomEdgeDark : bottomEdgeLight,
+        borderBottomColor: isDark
+          ? (isHovered ? hoverBottomEdgeDark : bottomEdgeDark)
+          : (isHovered ? hoverBottomEdgeLight : bottomEdgeLight),
       },
       shadow: disabled ? {} : buttonShadow,
       textColor: colorValues.contrast,
-      topEdgeColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(255, 255, 255, 0.25)',
-      bottomEdgeColor: isDark ? 'rgba(0, 0, 0, 0.25)' : 'rgba(0, 0, 0, 0.12)',
+      topEdgeColor: isDark
+        ? (isHovered ? 'rgba(255, 255, 255, 0.18)' : 'rgba(255, 255, 255, 0.12)')
+        : (isHovered ? 'rgba(255, 255, 255, 0.35)' : 'rgba(255, 255, 255, 0.25)'),
+      bottomEdgeColor: isDark
+        ? (isHovered ? 'rgba(0, 0, 0, 0.2)' : 'rgba(0, 0, 0, 0.25)')
+        : (isHovered ? 'rgba(0, 0, 0, 0.08)' : 'rgba(0, 0, 0, 0.12)'),
     },
     outlined: {
       container: {
-        backgroundColor: 'transparent',
+        backgroundColor: isHovered && !disabled ? colorValues.light + '15' : 'transparent',
         borderWidth: 1.5,
         opacity,
         // Subtle dimensional border for outlined
@@ -285,7 +302,7 @@ function getVariantStyles(variant, colorValues, disabled, theme, isDark) {
     },
     ghost: {
       container: {
-        backgroundColor: 'transparent',
+        backgroundColor: isHovered && !disabled ? colorValues.light + '15' : 'transparent',
         opacity,
         // No border for ghost
         borderWidth: 0,
@@ -297,22 +314,30 @@ function getVariantStyles(variant, colorValues, disabled, theme, isDark) {
     },
     soft: {
       container: {
-        backgroundColor: isDark 
-          ? colorValues.main + '25' // 15% opacity in dark mode
-          : colorValues.light + '30', // 19% opacity in light
+        backgroundColor: isDark
+          ? (isHovered ? colorValues.main + '35' : colorValues.main + '25')
+          : (isHovered ? colorValues.light + '40' : colorValues.light + '30'),
         opacity,
         overflow: 'hidden',
         // Subtle dimensional border
         borderWidth: 1,
-        borderTopColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.6)',
-        borderBottomColor: isDark ? 'rgba(0, 0, 0, 0.2)' : 'rgba(0, 0, 0, 0.08)',
+        borderTopColor: isDark
+          ? (isHovered ? 'rgba(255, 255, 255, 0.15)' : 'rgba(255, 255, 255, 0.1)')
+          : (isHovered ? 'rgba(255, 255, 255, 0.7)' : 'rgba(255, 255, 255, 0.6)'),
+        borderBottomColor: isDark
+          ? 'rgba(0, 0, 0, 0.2)'
+          : (isHovered ? 'rgba(0, 0, 0, 0.05)' : 'rgba(0, 0, 0, 0.08)'),
         borderLeftColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
         borderRightColor: isDark ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.03)',
       },
       shadow: {},
       textColor: colorValues.main,
-      topEdgeColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(255, 255, 255, 0.4)',
-      bottomEdgeColor: isDark ? 'rgba(0, 0, 0, 0.15)' : 'rgba(0, 0, 0, 0.06)',
+      topEdgeColor: isDark
+        ? (isHovered ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.06)')
+        : (isHovered ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.4)'),
+      bottomEdgeColor: isDark
+        ? (isHovered ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.15)')
+        : (isHovered ? 'rgba(0, 0, 0, 0.04)' : 'rgba(0, 0, 0, 0.06)'),
     },
   };
 
