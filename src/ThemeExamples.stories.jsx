@@ -133,7 +133,7 @@ const DemoApp = () => {
                   { color: theme.colors.text.secondary },
                 ]}
               >
-                {isDark ? '🌙 Dark' : '☀️ Light'}
+                {isDark ? '🌙 Dark Mode' : '☀️ Light Mode'}
               </Text>
             </View>
           </View>
@@ -380,8 +380,8 @@ const DemoApp = () => {
   );
 };
 
-// Light Theme Story
-export const LightTheme = {
+// Light Mode Story
+export const LightMode = {
   render: () => (
     <UIFoundationProvider colorScheme="light">
       <DemoApp />
@@ -389,8 +389,8 @@ export const LightTheme = {
   ),
 };
 
-// Dark Theme Story
-export const DarkTheme = {
+// Dark Mode Story
+export const DarkMode = {
   render: () => (
     <UIFoundationProvider colorScheme="dark">
       <DemoApp />
@@ -404,7 +404,7 @@ export const SideBySide = {
     <View style={styles.sideBySide}>
       <View style={styles.sideBySidePanel}>
         <View style={[styles.panelHeader, { backgroundColor: '#F5F5F5', borderBottomColor: '#E0E0E0' }]}>
-          <Text style={[styles.panelTitle, { color: '#212121' }]}>☀️ Light Theme</Text>
+          <Text style={[styles.panelTitle, { color: '#212121' }]}>☀️ Light Mode</Text>
         </View>
         <UIFoundationProvider colorScheme="light">
           <DemoApp />
@@ -413,7 +413,7 @@ export const SideBySide = {
       <View style={[styles.sideBySideDivider]} />
       <View style={styles.sideBySidePanel}>
         <View style={[styles.panelHeader, { backgroundColor: '#1E1E1E', borderBottomColor: '#333' }]}>
-          <Text style={[styles.panelTitle, { color: '#FAFAFA' }]}>🌙 Dark Theme</Text>
+          <Text style={[styles.panelTitle, { color: '#FAFAFA' }]}>🌙 Dark Mode</Text>
         </View>
         <UIFoundationProvider colorScheme="dark">
           <DemoApp />
