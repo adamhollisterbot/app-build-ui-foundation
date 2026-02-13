@@ -18,6 +18,15 @@ export const palette = {
     900: '#212121',
     950: '#121212',
   },
+  // Dark mode - add much darker shades for genuine dark mode
+  darkMode: {
+    background: '#0A0A0A', // Deep black for primary background
+    surface: '#1A1A1A', // Slightly elevated from background
+    surfaceAlt: '#262626', // Alternative surface (cards, panels)
+    surfaceElevated: '#333333', // Most elevated surfaces (modals, floating elements)
+    border: '#404040', // Borders in dark mode
+    borderSubtle: '#2A2A2A', // Subtle borders
+  },
   // Pure black and white
   white: '#FFFFFF',
   black: '#000000',
@@ -97,28 +106,28 @@ export const lightColors = {
   overlay: 'rgba(0, 0, 0, 0.5)',
 };
 
-// Dark mode surface colors
+// Dark mode surface colors - GENUINELY DARK
 export const darkColors = {
   background: {
-    primary: palette.gray[950],
-    secondary: palette.gray[900],
-    tertiary: palette.gray[800],
+    primary: palette.darkMode.background, // #0A0A0A - Deep black
+    secondary: palette.darkMode.surface, // #1A1A1A - Slightly elevated
+    tertiary: palette.darkMode.surfaceAlt, // #262626 - More elevated
   },
   surface: {
-    primary: palette.gray[900],
-    secondary: palette.gray[800],
-    elevated: palette.gray[800],
+    primary: palette.darkMode.surface, // #1A1A1A - Main surfaces
+    secondary: palette.darkMode.surfaceAlt, // #262626 - Alternative surfaces (cards)
+    elevated: palette.darkMode.surfaceElevated, // #333333 - Modals, floating elements
   },
   text: {
-    primary: palette.gray[50],
-    secondary: palette.gray[400],
-    tertiary: palette.gray[500],
-    inverse: palette.gray[900],
+    primary: '#FFFFFF', // Pure white for maximum contrast on dark backgrounds
+    secondary: '#D4D4D8', // Light gray for secondary text (high contrast)
+    tertiary: '#A1A1A6', // Medium gray for tertiary (still readable)
+    inverse: palette.darkMode.background, // #0A0A0A
   },
   border: {
-    default: palette.gray[700],
-    subtle: palette.gray[800],
-    strong: palette.gray[600],
+    default: palette.darkMode.border, // #404040 - Visible borders
+    subtle: palette.darkMode.borderSubtle, // #2A2A2A - Subtle dividers
+    strong: '#505050', // Strong borders for emphasis
   },
-  overlay: 'rgba(0, 0, 0, 0.7)',
+  overlay: 'rgba(0, 0, 0, 0.85)', // Darker overlay for depth
 };
